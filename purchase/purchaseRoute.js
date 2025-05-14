@@ -35,12 +35,25 @@ router.post("/", async (req, res) => {
 router.get("/all", async (req, res) => {
   const purchaseItems = await Purchase.find().populate("productID");
   if (!purchaseItems || purchaseItems.length === 0) {
-    return res.json({ message: "purchse not found" });
+    return res.json({ message: "purchase not found" });
   }
   if (purchaseItems) {
     return res.json({
       message: "purchase items are---",
       orders: purchaseItems,
+    });
+  }
+});
+router.post("/user", async (req, res) => {
+  const { userID } = req.body;
+  const userPurchases = await Purchase.find({ userID }).populate("productID");
+  if (!userPurchases || userPurchases.length === 0) {
+    return res.json({ message: "purchase not found" });
+  }
+  if (userPurchases) {
+    return res.json({
+      message: "purchase items are---",
+      orders: userPurchases,
     });
   }
 });

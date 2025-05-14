@@ -2,7 +2,6 @@ const express = require("express");
 const User = require("../user/user");
 const AddToCart = require("./cart");
 const Product = require("../product/product");
-const cart = require("./cart");
 const router = express.Router();
 
 // add to cart route
@@ -44,6 +43,17 @@ router.get("/all", async (req, res) => {
     return res.json({ message: "couldnt find the cart iteams" });
   } else {
     return res.json({ message: "alll cart items are---", cartItems });
+  }
+});
+
+//see specific user add to cart items
+router.post("/user", async (req, res) => {
+  const { userID } = req.body;
+  const userCart = await AddToCart.find({ userID }).populate("productID");
+  if (!userCart || userCart.length === 0) {
+    return res.json({ message: "couldnt find the cart iteams" });
+  } else {
+    return res.json({ message: "alll cart items are---", cartItems: userCart });
   }
 });
 router.delete("/delete", async (req, res) => {
